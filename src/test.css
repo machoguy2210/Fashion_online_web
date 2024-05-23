@@ -1,0 +1,30 @@
+.carousel-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .nav-button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    font-size: 18px;
+  }
+  
+  .cards-container {
+    display: flex;
+    overflow: hidden;
+    width: 500px; /* 100px width for each card * 5 cards */
+  }
+  
+  .card {
+    flex: 0 0 100px; /* Each card will be 100px wide */
+    margin: 5px;
+    padding: 20px;
+    background-color: #f1f1f1;
+    text-align: center;
+    border: 1px solid #ccc;
+  }
+  
