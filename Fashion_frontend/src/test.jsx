@@ -1,38 +1,43 @@
-import React, { useState } from "react";
-import "./test.css";
-
-const cards = [
-  "Card 1", "Card 2", "Card 3", "Card 4", "Card 5",
-  "Card 6", "Card 7", "Card 8", "Card 9", "Card 10"
-];
+import React, { useState,useEffect } from "react";
+import axios from "axios";
 
 function Test() {
-  const [startIndex, setStartIndex] = useState(0);
-  const cardsToShow = 5;
+  const [imageSrc, setImageSrc] = useState(null);
+ 
+  useEffect(() => {
+    const fetchImage = async () => {
+      try {
+        const response = await axios.get(`http://localhost:3001/api/get`, {
+          responseType: 'blob' // Chỉ định dạng phản hồi là dạng blob
+        });
+        console.log(response);
+        const blob = new Blob([response.data], { type: response.headers['content-type'] });
+        const url = URL.createObjectURL(blob);
+        setImageSrc(url);
+      } catch (error) {
+        console.error('Error fetching image:', error);
+      }
+    };
 
-  const handlePrev = () => {
-    if (startIndex > 0) {
-      setStartIndex(startIndex - 1);
-    }
-  };
+    fetchImage();
+    console.log('Re rendered');
 
-  const handleNext = () => {
-    if (startIndex < cards.length - cardsToShow) {
-      setStartIndex(startIndex + 1);
-    }
-  };
+    // Cleanup function
+    return () => {
+      // Revoke the object URL to free up resources
+      if (imageSrc) {
+        URL.revokeObjectURL(imageSrc);
+      }
+    };
+  }, []);
 
   return (
-    <div className="carousel-container">
-      <button className="nav-button" onClick={handlePrev}>&lt;</button>
-      <div className="cards-container">
-        {cards.slice(startIndex, startIndex + cardsToShow).map((card, index) => (
-          <div className="card" key={index}>
-            {card}
-          </div>
-        ))}
-      </div>
-      <button className="nav-button" onClick={handleNext}>&gt;</button>
+    <div style={{display: 'flex', alignItems:'center', justifyContent:'center',backgroundColor:'#000000'}} >
+      {imageSrc ? (
+        <img style={{maxHeight: '100vh'}} src={imageSrc} alt="Image" />
+      ) : (
+        <p>Loading image...</p>
+      )}
     </div>
   );
 }
