@@ -1,11 +1,12 @@
 import Card from "./Card"
 import picture from '../assets/clothes.jpg'
 import { Link,Outlet } from "react-router-dom";
+import background from '../assets/background_homepage.jpeg'
 
 function ProductList() {
     return (
         <>  
-            <img src="https://i.pinimg.com/originals/e3/ac/3a/e3ac3aff37d67c2647b5246822bb56bc.jpg"></img>
+            <img style={{maxWidth: "100vw"}} src={background}></img>
             <Link to="/collections/"><h1 className="product_list">Danh mục sản phẩm</h1></Link>
             <div>
                 <Link to="collections/ao-khoac" ><Card pic={picture} title="Áo khoác" /></Link>
