@@ -1,8 +1,18 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
+import { useUser } from '../UserContext';
 
 function Navbar() {
+  const {user} = useUser();
+
+  useEffect(() => {
+    if (user !== null) {
+      const account = document.getElementById('login_signup');
+      account.innerHTML = `${user.name}`;
+    }
+  }, [user]);
+
   const navigate = useNavigate();
   const handleLogin = () => {
     navigate('/login');
@@ -15,7 +25,7 @@ function Navbar() {
         <div id="nav_bar">
             <Link style={{textDecoration: 'none'}} to=""><img src="https://theme.hstatic.net/200000690725/1001078549/14/logo.png?v=363" style={{maxHeight: "50px"}} /></Link>
             <Link style={{textDecoration: 'none'}} to="/test">Test</Link> {/* This is a test link to test.jsx */}
-            <div id="nav_bar_group_button">
+            <div className="nav_bar_group_button">
               <div className="nav_bar_button">
                 <span>Áo</span>
                   <div className="Options">
@@ -60,7 +70,7 @@ function Navbar() {
               </div>
             </div>
             <input type="text" placeholder="Tìm kiếm sản phẩm" />
-            <div id="nav_bar_group_button">
+            <div id='login_signup' className="nav_bar_group_button">
               <div onClick={handleLogin} className="nav_bar_button" style={{fontSize: "1.3em"}}>Đăng nhập</div>
               <div onClick={handleRegister} className="nav_bar_button" style={{fontSize: "1.3em"}}>Đăng ký</div>
             </div>

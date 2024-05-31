@@ -5,9 +5,12 @@ import ProductDetail from "./Customer/ProductDetail";
 import { CartProvider } from "./Customer/CartContext";
 import { ProductProvider } from "./Customer/ProductContext";
 import { Routes,Route } from "react-router-dom";
-
+import { useUser } from "./UserContext";
 
 function Customer() {
+
+  const {user} = useUser();
+  console.log(user);
   
   return (
     <CartProvider>
