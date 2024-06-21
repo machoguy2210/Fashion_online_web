@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useUser } from "./UserContext";
+
 function LoginPage() {
 
     const {setUser} = useUser(); 
@@ -19,6 +20,7 @@ function LoginPage() {
         const response = await axios.post('http://localhost:3001/login', data);
         if(response.data.status === "success"){
             setUser(response.data.data);
+            localStorage.setItem('user', JSON.stringify(response.data.data));
             navigate('/');
           }
         else alert('Login Failed');
@@ -39,6 +41,7 @@ function LoginPage() {
         const response = await axios.post('http://localhost:3001/register', data);
         if(response.data.status === "success"){
             alert("Please check your mail to active the account");
+            navigate('/verify');
           }
         else alert(`Register Failed: ${response.data.message}`);
     };
@@ -99,7 +102,10 @@ function LoginPage() {
                         <span>or use your email password</span>
                         <input id='username_lgin' type="email" placeholder="Email" />
                         <input id='password_lgin' type="password" placeholder="Password" />
-                        <a href="#">Forget Your Password?</a>
+                        <span>
+                            <a href="#">Forget Your Password?</a>
+                            <a href="/verify">Verify your account?</a>
+                        </span>
                         <button onClick={loginto} type="submit" id="loginFormBtn">Sign In</button>
                     </form>
                 </div>

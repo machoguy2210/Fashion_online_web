@@ -8,7 +8,7 @@ function Card1(props) {
     };
     return (
         <div className="card1">
-            <img className="card1-image" src={props.pic} alt={props.title} />
+            <img className="card1-image" src={props.pic} alt={props.title}/>
             <p className="card1-title">{props.title}</p>
             <p className="card1-price">{props.price}VND</p>
         </div>
