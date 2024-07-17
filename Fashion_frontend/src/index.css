@@ -361,6 +361,22 @@
     color: rgb(0, 0, 0);
 }
 
+.site-footer__sidebar {
+    display: flex;
+    justify-content: space-between;
+    background-color: rgb(255, 255, 255);
+    padding: 20px;
+    margin-top: 50px;
+    width: 100vw;
+    position: relative;
+    bottom: 0;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.5);
+}
+
+.footer-menu {
+    display: flex;
+    justify-content: space-between;
+}
 
 .product_list {
     margin: 0px 0px 50px 0px;
@@ -428,6 +444,32 @@
     color: rgb(255, 255, 255);
 }
 
+#voucher-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+}
+
+.voucher-card {
+    display: flex;
+    width: 300px; 
+}
+
+.voucher-image {
+    width: 200px;
+    height: 100px;
+    margin: 10px;
+    border: 2px solid black;
+}
+
+.voucher-card div {
+    flex: 0.7;
+    display: flex;
+    flex-direction: column;
+}
+
+
+
 .card1 {
     padding: 0px;
     margin-left: 40px;
@@ -452,10 +494,7 @@
     color: rgb(255, 0, 0);
     margin: 10px;
 }
-.card1-button {
-    
 
-}
 #link-path {
     margin: 15px 0px 20px 0px;
     font-size: smaller;
@@ -510,7 +549,24 @@
 #price_filter {
     display: flex;
     flex-direction: column;
+    width: 200px;
 }
+
+#price_filter input {
+    margin: 5px 0px 5px 0px;
+    padding: 5px;
+    border-radius: 5px;
+    border: 1px solid black;
+}
+
+#price_filter button {
+    margin: 5px 0px 5px 0px;
+    padding: 5px;
+    border-radius: 5px;
+    border: 1px solid black;
+    cursor: pointer;
+}
+
 .SP-main{
     display: flex;
 }
@@ -576,6 +632,15 @@
     color: rgb(245, 139, 157);
 }
 
+.SP-button-loved{
+    border: none;
+    background-color: rgb(255, 255, 255);
+    font-size: 30px;
+    cursor: pointer;
+    margin-left: 20px;
+    color: #A0522D;
+}
+
 .SP-counter{
     display: flex;
 }
@@ -631,17 +696,6 @@
     margin-top: 20px;
 }
 
-.profile {
-    display: flex;
-    min-height: 200px;
-}
-.profile .left-profile {
-    flex: 0.3;
-    display: flex;
-    flex-direction: column;
-    padding-left: 30px;
-    min-height: 450px;
-}
 
 #cart-container {
     display: flex;
@@ -651,6 +705,7 @@
 
 #cart-product-container {
     flex: 0.55;
+    padding-left: 50px;
 }
 
 .cart-product {
@@ -672,10 +727,134 @@
     align-items: center;
     justify-content: center;
     border: 2px solid black;
+    border-radius: 10px;
+}
+#cart-form input {
+    margin: 10px;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid black;
+}
+#cart-form select {
+    margin: 10px;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid black;
+}
+
+#cart-form button {
+    margin: 10px;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid black;
+    cursor: pointer;
+}
+
+#cart-qr-payment {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    flex-direction: column;
+    border: 2px solid black;
+    border-radius: 10px;
+    width: 300px;
+    height: 300px;
 }
 
 
 
+.profile {
+    display: flex;
+    min-height: 200px;
+}
+.profile .left-profile {
+    flex: 0.3;
+    display: flex;
+    flex-direction: column;
+    padding-left: 30px;
+    min-height: 450px;
+}
+
+
+.star-rating {
+    display: flex;
+    flex-direction: row;
+}
+
+.star-rating button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    margin: 0 5px;
+}
+
+.star-rating .on {
+    color: gold;
+}
+
+.star-rating .off {
+    color: grey;
+}
+
+.cardsppp{
+    border: 1.5px solid black;
+    border-radius: 5px;
+    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.1);
+    padding: none;
+    margin-left: 20px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    width: 165px;
+    height: auto;
+    display: inline-block;
+    background-color: rgb(255, 255, 255);
+  }
+  
+  .cardsppp-image{
+    width: 100%;
+    height: 200px;
+    border-radius: 5px 5px 0 0;
+    margin-bottom: 0px;
+    cursor: pointer;
+  } 
+  
+  .cardsppp-title{
+    font-family: Arial, Helvetica, sans-serif;
+    margin-top: 0px;
+    margin-left: 5px;
+    color:#A0522D;
+    min-height: 60px;
+  }
+  
+  .cardsppp-price{
+    margin-left: 5px;
+    font-family: Arial, Helvetica, sans-serif;
+    margin-bottom: 2px;
+    color: #000000;
+  }
+
+.float-container {
+    display: flex;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    bottom: 0;
+    left: 0;
+}
+.float-container .inner-content {
+    background-color: rgb(255, 255, 255);
+    padding: 20px;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
 
 
 
@@ -721,12 +900,12 @@
 #admin-page-container {
     display: flex;
 }
-#admin-page-container #left-admin-page-container {
-    flex: 0.3;
-}
 
 #admin-page-container #right-admin-page-container {
-    flex: 0.7;
+    width: 100%;
+    overflow-y: auto;
+    height: calc(100vh - 50px);
+    padding-right: 100px;
 }
 .admin-sidebar {
     display: flex;
@@ -737,7 +916,7 @@
     border: 1px solid #ccc;
     width: 200px;
     height: calc(100vh - 50px);
-    margin: 0px;
+    margin: 0px 100px 0px 0px;
     padding: 0px;
 }
 
@@ -790,11 +969,10 @@
     overflow-y: auto;
 }
 
-#user-detail-container #user-detail-content img {
+#user-information img {
     width: 150px;
     height: 150px;
     border-radius: 50%;
-    
 }
 
 #user-detail-content #user-information {
@@ -809,3 +987,401 @@
     justify-content: space-evenly;
 }
 
+.product-details{
+    display: flex;
+    flex-direction: column;
+}
+.demuc{
+    margin-bottom: 10px;
+    font-size: 20px;
+}
+.demuc input{
+    font-size: 20px;
+    padding: 3px;
+    border: 1px solid black;
+    border-radius: 3px;
+}
+.demuc button{
+    font-size: 18px;
+    border: 1px solid black;
+    border-radius: 3px;
+    padding: 3px;
+    cursor: pointer;
+}
+.demuc button:hover{
+    background-color: #a9a9a980;
+}
+.linkanhx{
+    display: flex;
+    flex-direction: column;
+    width: 400px;
+}
+.linkanhx input{
+    margin-bottom: 5px;
+}
+.linkanhx div{
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
+}
+.linkanhx div button{
+    margin-left: 20px;
+    font-size: 15px;
+    border: 1px solid black;
+    border-radius: 3px;
+    padding: 3px;
+    cursor: pointer;
+    height: 30px;
+    width: 50px;
+    align-items: center;
+}
+.linkanhx div button:hover{
+    background-color: #a9a9a980;
+}
+.plspct{
+    margin-top: 5px;
+}
+.nutcuoi{
+    width: 100px;
+}
+
+.cardspp{
+    border: 1.5px solid black;
+    border-radius: 5px;
+    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.1);
+    padding: none;
+    margin-left: 20px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    width: 165px;
+    height: auto;
+    display: inline-block;
+    background-color: rgb(255, 255, 255);
+}
+.cardspp-image{
+    width: 100%;
+    height: 200px;
+    border-radius: 5px 5px 0 0;
+    margin-bottom: 0px;
+    cursor: pointer;
+}
+.cardspp-title{
+    font-family: Arial, Helvetica, sans-serif;
+    margin-top: 0px;
+    margin-left: 5px;
+    color:#A0522D;
+    min-height: 60px;
+}
+.cardspp-price{
+    margin-left: 5px;
+    font-family: Arial, Helvetica, sans-serif;
+    margin-bottom: 2px;
+    color: #000000;
+}
+
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+}
+th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+th {
+    background-color: #f4f4f4;
+    text-align: center;
+}
+tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+.stt{
+    text-align: center;
+}
+.ttct{
+    text-align: center;
+}
+.ttct:hover{
+    cursor: pointer;
+    text-decoration: underline;
+}
+.pagination{
+    text-align: center;
+}
+.arrow{
+    font-size: 20px;
+    background-color: #ffffff;
+    padding: none;
+    border: 1px solid ;
+    border-radius: 2px;
+    cursor: pointer;
+}
+.table-img{
+    width: 80px;
+    height: auto;
+}
+.productname{
+    width: 200px;
+}
+.sead{
+    display: flex;
+    justify-content: right;
+}
+.sead button{
+    background-color: #fff;
+    font-size: 18px;
+    padding: 5px;
+    border: 1px solid black;
+    cursor: pointer;
+    border-radius: 3px;
+}
+.sead button:hover{
+    color: #ffffff;
+    background-color: #A0522D;
+}
+.add-pro{
+    display: flex;
+    flex-direction: column;
+}
+.add-pro label{
+    margin-bottom: 5px;
+    font-size: 22px;
+}
+.add-pro input{
+    font-size: 20px;
+    padding: 3px;
+    border: 1px solid black;
+    border-radius: 3px;
+    margin-right: 10px;
+    margin-bottom: 5px;
+}
+.add-pro button{
+    font-size: 20px;
+    padding: 3px;
+    cursor: pointer;
+    
+}
+.adprbt{
+    margin-bottom: 10px;
+    margin-top: 5px;
+}
+.adprbt button{
+    margin-right: 10px;
+    width: 200px;
+}
+.typ{
+    margin-left: 30px;
+}
+.typ input{
+    width: 80px;
+}
+textarea{
+    padding: 3px;
+    font-size: 15px;
+    border: 1px solid black;
+    border-radius: 5px;
+}
+.adusdehd{
+    display: flex;
+    justify-content: space-between;
+}
+.adusdehd button{
+    font-size: 30px;
+    border: none;
+    background-color: #fff;
+    cursor: pointer;
+}
+.adusdehd button:hover{
+    color: #A0522D;
+}
+.adush3{
+    margin-top: 10px;
+    margin-bottom: 5px;
+}
+.linhpanh{
+    display: flex;
+    flex-direction: column;
+}
+.linhpanh input{
+    max-width: 400px;
+}
+.xoasp:hover{
+    color: red;
+    text-decoration: underline red;
+}
+.product-details{
+    display: flex;
+    flex-direction: column;
+}
+.demuc{
+    margin-bottom: 10px;
+    font-size: 20px;
+}
+.demuc input{
+    font-size: 20px;
+    padding: 3px;
+    border: 1px solid black;
+    border-radius: 3px;
+}
+.demuc button{
+    font-size: 18px;
+    border: 1px solid black;
+    border-radius: 3px;
+    padding: 3px;
+    cursor: pointer;
+}
+.demuc button:hover{
+    background-color: #a9a9a980;
+}
+.linkanhx{
+    display: flex;
+    flex-direction: column;
+    width: 400px;
+}
+.linkanhx input{
+    margin-bottom: 5px;
+}
+.linkanhx div{
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
+}
+.linkanhx div button{
+    margin-left: 20px;
+    font-size: 15px;
+    border: 1px solid black;
+    border-radius: 3px;
+    padding: 3px;
+    cursor: pointer;
+    height: 30px;
+    width: 50px;
+    align-items: center;
+}
+.linkanhx div button:hover{
+    background-color: #a9a9a980;
+}
+.plspct{
+    margin-top: 5px;
+}
+.nutcuoi{
+    width: 100px;
+}
+.adorderbut{
+    display: flex;
+    margin-bottom: 20px;
+}
+.adorderbut button{
+    margin-left: 30px;
+    font-size: 20px;
+    padding: 5px;
+    border: 1px solid black;
+    border-radius: 5px;
+    background-color: #fff;
+    cursor: pointer;
+}
+.adorderbut button:hover{
+    color: #fff;
+    background-color: #A0522D;
+}
+.adormadh{
+    cursor: pointer;
+}
+.adormadh:hover{
+    text-decoration: underline;
+}
+.adorttdh{
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+.adorttdh button{
+    border: none;
+    font-size: 30px;
+    background-color: #fff;
+    cursor: pointer;
+}
+.adorttdh button:hover{
+    color: #A0522D;
+}
+.adorttnn{
+    margin-left: 20px;
+    margin-bottom: 20px;
+    margin-top: 10px;
+}
+.adorxtt{
+    font-size: 18px;
+}
+.cardghh-text{
+    width: 70%;
+    margin-left: 20px;
+    margin-top: 10px;
+}
+
+.cardgh{
+    display: flex;
+    width: 500px;
+    height: auto;
+    border: 1.5px solid;
+    border-radius: 5px;
+    margin-left: 50px;
+    margin-top: 10px;
+    margin-bottom: 20px;
+    font-family: Arial, Helvetica, sans-serif;
+    }
+    .cardgh img{
+    width: 30%;
+    border-radius: 5px 0 0 5px;
+    cursor: pointer;
+    }
+    
+    .cardgh-text{
+    width: 50%;
+    }
+    
+    .cardgh-text p{
+    margin-left: 10px;
+    margin-top: 10px;
+    }
+    .cardghprice{
+      text-align: center;
+      margin-top: 10px;
+      margin-left: 10px;
+      display: flex;
+    }
+    .cargh-pr{
+      font-size: 20px;
+    }
+    .cardgh-price{
+      font-size: 30px;
+      margin-top: -7px;
+      margin-left: 10px;
+      color: #A0522D;
+    }
+    
+    .cardgh-button{
+      width: 20%;
+      display: flex;
+      flex-direction: column;
+      text-align: center;
+      justify-content: center;
+    }
+    
+    .cardgh-button button{
+      border: 1.5px solid;
+      margin-top: 20px;
+      width: 50px;
+      height: 40px;
+      border-radius: 0.5em;
+      padding: 2px;
+      color: rgb(0, 0, 0);
+      background-color: #ffffff;
+    }
+    
+    .cardgh-button button:hover{
+      cursor: pointer;
+      color: rgb(255, 255, 255);
+      background-color:#A0522D;
+    }
+    

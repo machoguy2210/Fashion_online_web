@@ -1,13 +1,13 @@
 import { useEffect } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useUser } from "./UserContext";
 
-function LoginPage() {
+function LoginPage(props) {
 
-    const {setUser} = useUser(); 
-
+    const { setUser } = useUser(); 
     const navigate = useNavigate();
+    const location = useLocation();
 
     const loginto = async (e) => {
         e.preventDefault();
@@ -18,12 +18,13 @@ function LoginPage() {
             password
         }
         const response = await axios.post('http://localhost:3001/login', data);
-        if(response.data.status === "success"){
+        if (response.data.status === "success") {
             setUser(response.data.data);
             localStorage.setItem('user', JSON.stringify(response.data.data));
             navigate('/');
-          }
-        else alert('Login Failed');
+        } else {
+            alert('Login Failed');
+        }
     };
 
     const register_account = async (e) => {
@@ -39,17 +40,26 @@ function LoginPage() {
             password
         }
         const response = await axios.post('http://localhost:3001/register', data);
-        if(response.data.status === "success"){
-            alert("Please check your mail to active the account");
+        if (response.data.status === "success") {
+            alert("Please check your mail to activate the account");
             navigate('/verify');
-          }
-        else alert(`Register Failed: ${response.data.message}`);
+        } else {
+            alert(`Register Failed: ${response.data.message}`);
+        }
     };
 
     useEffect(() => {
         const container = document.getElementById('container');
         const registerBtn = document.getElementById('register');
         const loginBtn = document.getElementById('login');
+
+        const setActiveClass = () => {
+            if (location.pathname === '/register') {
+                container.classList.add("active");
+            } else {
+                container.classList.remove("active");
+            }
+        };
 
         registerBtn.addEventListener('click', () => {
             container.classList.add("active");
@@ -59,6 +69,9 @@ function LoginPage() {
             container.classList.remove("active");
         });
 
+        // Call setActiveClass on mount
+        setActiveClass();
+
         return () => {
             registerBtn.removeEventListener('click', () => {
                 container.classList.add("active");
@@ -67,8 +80,8 @@ function LoginPage() {
             loginBtn.removeEventListener('click', () => {
                 container.classList.remove("active");
             });
-        }
-    }, []);
+        };
+    }, [location.pathname]);
 
     return (
         <div id="body">

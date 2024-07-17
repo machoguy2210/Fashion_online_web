@@ -27,7 +27,7 @@ function UserDetail(props) {
 
     useEffect(() => {
         const fetchOrders = async () => {
-            const response = await axios.get(`http://localhost:3001/api/orders/${user._id}`);
+            const response = await axios.get(`http://localhost:3001/api/orders/get/${user._id}`);
             if (response.status === 200) setOrders(response.data);
             else alert('Internal server error');
         }
@@ -38,10 +38,14 @@ function UserDetail(props) {
         console.log(orders);
     }, [orders]);
 
-
+    const CloseWindow = (e) => {
+        if (e.target.id === "user-detail-container") {
+            props.onClose();
+        }
+    }
 
     return (
-        <div id="user-detail-container">
+        <div id="user-detail-container" onClick={CloseWindow}>
             <div id="user-detail-content">
                 <button onClick={props.onClose}>Close</button>
                 <h1>Chi tiết khách hàng</h1>
@@ -55,10 +59,12 @@ function UserDetail(props) {
                 </div>
                 <h2>Sản phẩm yêu thích</h2>
                 <div id="favorite-products" style={{display: "flex"}}>
-                    {favoriteProducts.map((product, index) => (
-                        <div key={index}>
-                            <img src={product.image_link[0]} />
-                            <p>{product.product_name}</p>
+                    {favoriteProducts.length === 0 ? <p>Không có sản phẩm yêu thích</p> :
+                    favoriteProducts.map((product, index) => (
+                        <div key={index} className="cardspp">
+                            <img className="cardspp-image" src={product.image_link[0]} />
+                            <p className="cardspp-title">{product.product_name}</p>
+                            <p className="cardspp-price">{product.price}VND</p>
                         </div>
                     ))}
                 </div>
@@ -91,7 +97,6 @@ function UserDetail(props) {
                         </tbody>
                     </table>
                 </div>
-                <div style={{height: "1000px"}}>Cho qua chiều cao</div>
             </div>
         </div>
     )

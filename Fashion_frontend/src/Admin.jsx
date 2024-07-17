@@ -4,6 +4,11 @@ import { Link } from "react-router-dom";
 import SideBar from "./Admin/Sidebar";
 import Users from "./Admin/Users";
 import Product from "./Admin/Product";
+import Voucher from "./Admin/Voucher";
+import Revenue from "./Admin/Revenue";
+import AdminOrder from "./Admin/AdminOrder";
+import { Routes, Route } from "react-router-dom";
+import "./Admin/Admin.css"
 
 function Admin() {
   const {user} = useUser();
@@ -21,8 +26,13 @@ function Admin() {
           <SideBar />
         </div>
         <div id="right-admin-page-container">
-          <Users />
-          <Product />
+          <Routes>
+            <Route path="/user" element={<Users />} />
+            <Route path="/products" element={<Product />} />
+            <Route path="/vouchers" element={<Voucher />} />
+            <Route path="/revenue" element={<Revenue />} />
+            <Route path="/orders" element={<AdminOrder />} />
+          </Routes>
         </div>
       </div>
 

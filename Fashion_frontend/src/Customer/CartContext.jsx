@@ -8,18 +8,23 @@ export const CartProvider = ({children}) => {
         else return [];
     });
     const addToCart = (product) => {
-        setCart([...cart, product]);
-    };
-    const removeFromCart = (product) => {
-        setCart(cart.filter((item) => item.id !== product.id));
+        const productIndex = cart.findIndex((item) => ((item._id === product._id) && (item.size === product.size) && (item.color === product.color)));
+        if (productIndex === -1) {
+            setCart([...cart, product]);
+        } else {
+            const newCart = [...cart];
+            newCart[productIndex].quantity += 1;
+            setCart(newCart);
+        }
     };
 
     useEffect(() => {
         if (cart.length > 0) localStorage.setItem('cart', JSON.stringify(cart));
+        else localStorage.removeItem('cart');
     },[cart]);
 
     return (
-        <CartContext.Provider value={{cart, setCart, addToCart, removeFromCart}}>
+        <CartContext.Provider value={{cart, setCart, addToCart}}>
             {children}
         </CartContext.Provider>
     );

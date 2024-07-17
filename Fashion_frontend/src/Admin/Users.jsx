@@ -23,7 +23,7 @@ function Users() {
 
     const deleteUser = (index) => {
         if (window.confirm("Bạn có chắc chắn muốn xóa khách hàng này?")) 
-            axios.delete(`http://localhost:3001/api/users/${users[index]._id}`)
+            axios.delete(`http://localhost:3001/api/users/delete/${users[index]._id}`)
                 .then(response => {
                     setUsers(users.filter((user, i) => i !== index));
                 })

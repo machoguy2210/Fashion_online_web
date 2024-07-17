@@ -1,10 +1,15 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useProduct } from '../ProductContext';
+import { useUser } from '../UserContext';
 import { useCart } from './CartContext';
 import { FaHeart } from "react-icons/fa6";
+import { IoPersonCircleSharp } from "react-icons/io5";
+import { CiStar } from "react-icons/ci";
+import axios from 'axios';
 
 const ProductDetail = () => {
+    const {user} = useUser();
     const {products} = useProduct();
     const {cart, addToCart} = useCart();
     const { id } = useParams();
@@ -12,8 +17,40 @@ const ProductDetail = () => {
     const [color, setColor] = useState(null);
     const [size, setSize] = useState(null);
     const [quantity, setQuantity] = useState(1);
+    const [reviews, setReviews] = useState([]);
+    const [isFavorite, setIsFavorite] = useState(false);
 
     const quantityref = useRef(null);
+
+    useEffect(() => {
+        if (user !== null) {
+            if (user.favorite_products.find(p => p === id) !== undefined) setIsFavorite(true);
+            else setIsFavorite(false);
+        }
+    }, []);
+
+    const toggleFavorite = () => {
+        if (isFavorite) {
+            axios.post('http://localhost:3001/api/users/remove-favorite', { userId: user._id, id })
+                .then(response => {
+                    if (response.data.status === 'success') {
+                        setIsFavorite(false);
+                        localStorage.setItem('user', JSON.stringify(response.data.user));
+                        location.reload();
+                    }
+                })
+                .catch(error => console.error(error));
+        } else {
+            axios.post('http://localhost:3001/api/users/add-favorite', { userId: user._id, id })
+                .then(response => {
+                    if (response.data.status === 'success') {
+                        setIsFavorite(true);
+                        localStorage.setItem('user', JSON.stringify(response.data.user));
+                    }
+                })
+                .catch(error => console.error(error));
+        }
+    };
 
     useEffect(() => {
         if (products.length > 0 && product !== undefined)
@@ -41,7 +78,14 @@ const ProductDetail = () => {
                 }
             }
         }
-    })
+    },[color, size]);
+
+    useEffect(() => {
+        axios.get(`http://localhost:3001/api/reviews/get/${id}`)
+            .then(response => {
+                if (response.status === 200) setReviews(response.data.reviews);
+            })
+    },[id]);
 
     const changeColor = (e) => {
         setColor(e.target.value);
@@ -88,7 +132,10 @@ const ProductDetail = () => {
     },[quantity]);
 
     const addProduct = () => {
-        if (color !== null && size !== null) addToCart({productID: product._id, color: color, size: size, quantity: quantity, name: product.product_name, image: product.image_link[0], price: product.price, description: product.description});
+        if (color !== null && size !== null) {
+            alert('Đã thêm vào giỏ hàng!');
+            addToCart({productID: product._id, color: color, size: size, quantity: quantity, name: product.product_name, image: product.image_link[0], price: product.price, description: product.description});
+        }
         else alert('Vui lòng chọn màu và size!');
     };
 
@@ -114,10 +161,9 @@ const ProductDetail = () => {
                         <input ref={quantityref} type='number' defaultValue={quantity} onChange={changeQuantity}/>
                         <button onClick={increaseCounter} className='SP-button'>+</button>
                     </div>
-                    <button className='SP-button-love' type="submit"><FaHeart/></button>
+                    <button className={isFavorite? 'SP-button-loved' : 'SP-button-love'}  type="submit" onClick={toggleFavorite} disabled={user === null}><FaHeart/></button>
                     <br/>
-                    <button className='SP-button' onClick={addProduct}>Thêm vào giỏ hàng</button>
-                    <button className='SP-button' >Mua ngay</button>
+                    <button className='SP-button' onClick={addProduct} disabled={user === null}>Thêm vào giỏ hàng</button>
                 </div>
             </div>
             <div className="SP-mota">
@@ -126,9 +172,19 @@ const ProductDetail = () => {
             </div>
             <div className="SP-danhgia">
                 <h2>Đánh giá của khách hàng</h2>
-            </div>
-            <div className="SP-splq">
-                <h2>Các sản phẩm bạn có thể quan tâm</h2>
+                <div>
+                    {reviews.length === 0 ? <p>Chưa có đánh giá nào!</p> :
+                    reviews.map((review, index) => (
+                        <div key={index} style={{display: "flex"}}>   
+                            <IoPersonCircleSharp fontSize={"3em"} />
+                            <div>
+                                <div>User</div>
+                                <span>{review.rating}<CiStar/> / 5<CiStar/></span>
+                                <p>{review.comment}</p>
+                            </div>
+                        </div>
+                    ))}
+                </div>
             </div>
             <br/>
             <br/>

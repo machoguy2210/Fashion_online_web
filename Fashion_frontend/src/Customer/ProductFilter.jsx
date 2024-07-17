@@ -1,4 +1,4 @@
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useLocation } from 'react-router-dom';
 import Card1 from './Card1';
 import React, { useState, useEffect } from 'react';
 import { useProduct } from '../ProductContext';
@@ -7,15 +7,20 @@ function ProductFilter() {
     const {products} = useProduct();
     const [sub_product, setSub_product] = useState([]);
     const {category} = useParams();
+    const location = useLocation();
+
     useEffect(() => {
-        if (category !== undefined) {
-            const filter_product = products.filter((product) => product.category === category);
-            setSub_product(filter_product);
+        let searchParams = new URLSearchParams(location.search);
+        let searchTerms = searchParams.get('search') || '';
+        let filteredProducts = products;
+        if (category) {
+            filteredProducts = products.filter(product => product.category === category);
         }
-        else {
-            setSub_product(products);
+        if (searchTerms) {
+            filteredProducts = filteredProducts.filter(product => product.product_name.toLowerCase().includes(searchTerms.toLowerCase()));
         }
-    }, [category,products]);
+        setSub_product(filteredProducts);
+    }, [category,products, location.search]);
 
     let minPrice = 0;
     let maxPrice = 0;

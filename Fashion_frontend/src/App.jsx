@@ -10,19 +10,20 @@ import { ProductProvider } from "./ProductContext"
 function App() {
 
   return (
+    <BrowserRouter>
       <UserProvider>
         <ProductProvider>
-          <BrowserRouter>
-            <Routes>
-              <Route path="/*"  element={<Customer/>} />
-              <Route path="/admin"  element={<Admin/>} />
-              <Route path="/login" element={<LoginPage/> } />
-              <Route path="/test" element= {<Test />} />
-              <Route path="/verify" element={<VerifyAccount />} />
-            </Routes>
-          </BrowserRouter>
+          <Routes>
+            <Route path="/*"  element={<Customer/>} />
+            <Route path="/admin/*"  element={<Admin/>} />
+            <Route path="/login" element={<LoginPage/> } />
+            <Route path="/register" element={<LoginPage/> } />
+            <Route path="/test" element= {<Test />} />
+            <Route path="/verify" element={<VerifyAccount />} />
+          </Routes>
         </ProductProvider>
       </UserProvider>
+      </BrowserRouter>
   )
 }
 

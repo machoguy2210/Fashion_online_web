@@ -5,21 +5,27 @@ import axios from "axios";
 import QrCode from "qrcode.react";
 import { Link } from "react-router-dom";
 import { TiDelete } from "react-icons/ti";
+import { useUser } from "../UserContext";
+import { Navigate } from "react-router-dom";
 
 function Cart() {   
 
     const {cart, setCart} = useCart();
     const {products} = useProduct();
+    const {user} = useUser();
+    if (!user) {
+        return <Navigate to="/login" />;
+    }
 
     const [money, setMoney] = useState(0);
-    let money1 = 21000;
-    let message = "Thanh toan don hang";
+    let message = user.email;
 
     const [cities, setCities] = useState([]);
     const [districts, setDistricts] = useState([]);
     const [wards, setWards] = useState([]);
     const [selectedCity, setSelectedCity] = useState("");
     const [selectedDistrict, setSelectedDistrict] = useState("");
+    const [showQR, setShowQR] = useState(false);
   
     useEffect(() => {
       axios.get("https://raw.githubusercontent.com/kenzouno1/DiaGioiHanhChinhVN/master/data.json")
@@ -38,6 +44,7 @@ function Cart() {
         });
         setMoney(total);
     }, [cart]);
+
 
 
   
@@ -77,20 +84,20 @@ function Cart() {
         const newCart = [...cart];
         const product = products.find(p => p._id === newCart[index].productID);
     
-    if (!product) {
-        console.error("Product not found");
-        return;
-    }
-    else {
-        console.log(product);
-    }
+        if (!product) {
+            console.error("Product not found");
+            return;
+        }
+        else {
+            console.log(product);
+        }
 
-    const productType = product.type.find(t => t.color === newCart[index].color && t.size === newCart[index].size);
-    
-    if (!productType) {
-        console.error("Product type not found");
-        return;
-    }
+        const productType = product.type.find(t => t.color === newCart[index].color && t.size === newCart[index].size);
+        
+        if (!productType) {
+            console.error("Product type not found");
+            return;
+        }
         const remain_quantity = product.type.find(t => t.color === newCart[index].color && t.size === newCart[index].size).quantity;
         if (newCart[index].quantity + 1 > remain_quantity) newCart[index].quantity = remain_quantity;
         else 
@@ -132,15 +139,64 @@ function Cart() {
     let money_string = money.toString();
     // Input string
     let input_data = '00020101021138620010A00000072701320006970454011899MM24531M818986280208QRIBFTTA5303704540'+money_string.length+money_string+'5802VN62'+(23+message.length)+'0515MOMOW2W8189862808'+message.length.toString().padStart(2, '0')+message+'80039996304';
+    //let input_data = '00020101021238560010A0000007270126000697041501121078739264260208QRIBFTTA5303704540'+money_string.length+money_string+'5802VN62'+(4+message.length).toString().padStart(2,'0')+'08'+message.length.toString().padStart(2, '0')+message+'6304'
     
+
     // Calculate CRC
     const crc_result = crc16_ccitt(input_data);
     input_data += crc_result;
+
+    const createOrder = (event) => {
+        event.preventDefault();
+        if (window.confirm("Xác nhận đặt hàng?")) {
+            const form = event.target;
+            const data = new FormData(form);
+            const order = {
+                customer: {
+                    accountID: user._id,
+                    name: data.get("name"),
+                    email: user.email,
+                    address: data.get("address"),
+                    phone: data.get("phone"),
+                    city: cities.find(city => city.Id === data.get("city")).Name,
+                    district: districts.find(district => district.Id === data.get("district")).Name,
+                    ward: wards.find(ward => ward.Id === data.get("ward")).Name,
+                },
+                payment: data.get("payment-method"),
+                products: cart,
+                cost: money,
+                voucherID: data.get("voucher"),
+                status: "Đang chờ xác nhận",
+                dateOrdered: new Date().toISOString(),
+                dateDelivery: null
+            }
+            axios.post("http://localhost:3001/api/orders/new-order", order)
+                .then(response => {
+                    console.log(response.data);
+                    localStorage.removeItem("cart");
+                    if (data.get("payment-method") === "BANKING") {
+                        setShowQR(true);
+                    }
+                    else {
+                        alert("Đặt hàng thành công!");
+                        setCart([]);
+                    }
+                })
+                .catch(error => {
+                    console.error("Error creating order: ", error);
+                })
+        }
+    }
     
+    const qrClick = () => {
+        setShowQR(false);
+        setCart([]);
+    }
 
     return (
         <div id="cart-container">
             <div id="cart-product-container">
+                <h2 style={{marginBottom: "50px"}}>Giỏ hàng của bạn</h2>
                 {cart.map((product, index) => {
                     return <div className="cart-product" key={index}>
                         <TiDelete onClick={() => deleteProduct(index)} />
@@ -162,63 +218,68 @@ function Cart() {
                 })}
             </div>
             <div id="cart-form-container">
-                <div id="cart-form">
+                {!showQR? <div id="cart-form">
                     <h3>Thông tin đặt hàng</h3>
-                    <h5>Tổng số tiền: </h5>
-                    <h5>{money}</h5>
-                    <form>
-                        <input type="text" placeholder="Họ và tên" />
-                        <input type="text" placeholder="Số nhà, Đường,..." />
-                        <input type="text" placeholder="Số điện thoại" />
-                        <p>Phương thức thanh toán</p>
+                    <h5>Tổng số tiền: {money}</h5>
+                    <form style={{display: "flex", flexDirection: "column", width: "100%"}} onSubmit={createOrder}>
+                        <input name="name" type="text" placeholder="Họ và tên" required/>
+                        <input name="address" type="text" placeholder="Số nhà, Đường,..." required/>
+                        <input name="phone" type="tel" placeholder="Số điện thoại" required/>
+                        <select name="payment-method" required>
+                            <option value="">Chọn phương thức thanh toán</option>
+                            <option value="cod">Thanh toán khi nhận hàng</option>
+                            <option value="BANKING">Thanh toán qua QR code</option>
+                        </select>
                         <div>
                             <select
-                                className="form-select form-select-sm mb-3"
                                 id="city"
-                                aria-label=".form-select-sm"
+                                name="city"
                                 value={selectedCity}
                                 onChange={handleCityChange}
+                                required
                             >
-                                <option value="" selected>Chọn tỉnh thành</option>
+                                <option value="">Chọn tỉnh thành</option>
                                 {cities.map(city => (
                                 <option key={city.Id} value={city.Id}>{city.Name}</option>
                                 ))}
                             </select>
                         
                             <select
-                                className="form-select form-select-sm mb-3"
                                 id="district"
-                                aria-label=".form-select-sm"
+                                name="district"
                                 value={selectedDistrict}
                                 onChange={handleDistrictChange}
                                 disabled={districts.length === 0}
+                                required
                             >
-                                <option value="" selected>Chọn quận huyện</option>
+                                <option value="">Chọn quận huyện</option>
                                 {districts.map(district => (
                                 <option key={district.Id} value={district.Id}>{district.Name}</option>
                                 ))}
                             </select>
                             <select
-                                className="form-select form-select-sm"
                                 id="ward"
-                                aria-label=".form-select-sm"
+                                name="ward"
                                 disabled={wards.length === 0}
+                                required
                             >
-                                <option value="" selected>Chọn phường xã</option>
+                                <option value="">Chọn phường xã</option>
                                 {wards.map(ward => (
                                 <option key={ward.Id} value={ward.Id}>{ward.Name}</option>
                                 ))}
                             </select>
-                            </div>
+                        </div>
+                        {//<input name="voucher" type="text" placeholder="Voucher (nếu có)"/>
+                        }
+                        <button type="submit">Đặt hàng</button>
                     </form>
-                </div>
+                </div> :
                 <div id="cart-qr-payment">
-                    {//<QrCode value={`2|99||Dao Tan Binh||0|0|${money}|${message}|transfer_myqr|81898628`}/> <br/> <br/>
-                    }
-
+                    <h3>Thanh toán qua QR code</h3>
                     <QrCode value={input_data} />
-                    
+                    <button onClick={qrClick}>Xác nhận đã thanh toán</button>
                 </div>
+                }
             </div>
         </div>
     )
